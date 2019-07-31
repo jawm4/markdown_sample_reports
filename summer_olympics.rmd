@@ -1,0 +1,91 @@
+---
+title: "Summer Olympics Analysis"
+author: "MJ"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    toc_collapsed: false
+---
+
+## Intro
+
+Below analysis is based on [Kaggle: Olympic Sports and Medals](https://www.kaggle.com/the-guardian/olympic-games/data) dataset, which aggregates all of the medals granted to Olympians durring Summer Games.
+
+```{r, dane, echo=FALSE}
+oly <- read.csv(
+  file="summer.csv",
+  header = TRUE, sep=";",
+  dec = ".")
+```
+### Basic information
+
+Dataset consists of `r dim(oly)[2]` variables and `r nrow(oly)` observations.
+
+1. **Year**
+2. **City**
+3. **Sport**
+4. **Discipline**
+5. **Athlete**
+6. **Country**
+7. **Gender**
+8. **Event**
+9. **Medal**
+
+## Tables and plots
+
+### **List of the best scoring (number of medals) countries in history**
+
+```{r, tab1, echo=FALSE, warning=FALSE,message=FALSE}
+library(knitr)
+library(ggplot2)
+library(dplyr)
+ctry1<- data.frame(head(sort(table(oly$Country), decreasing = TRUE), 10))
+ctry2<-data.frame(count(oly, Country, Medal))
+mrgd<-ctry2[ctry2[,1] %in% ctry1[,1],]
+
+colnames(ctry1) <- c("Country", "Number_of_medals")
+kable(ctry1)
+
+
+ggplot(data = mrgd, mapping = aes(x = mrgd[,1], y=mrgd[,3])) +
+  geom_bar(stat="identity",aes(fill=Medal))+scale_fill_manual(values=c("sienna","Gold", "Grey"))+
+  theme_bw()+
+  labs(y="Number of medals", 
+       x="Country")
+
+```
+
+### **Medals for Poland in chosen sports**
+
+```{r, tab2, echo=FALSE,warning=FALSE}
+pol<- oly[ which(oly$Country=='POL'),  ]
+pol2<-data.frame(count(pol, Sport))
+
+colnames(pol2) <- c("Sport", "Number_of_medals")
+kable(pol2)
+
+ggplot(data = pol2, mapping = aes(x = Sport, y=Number_of_medals)) +
+  geom_point(stat="identity", col="Red")+
+  theme_bw()+
+  labs(y="Number of medals", 
+       x="Discipline")+ theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+```
+
+### **Medals in Olympic Weightlifting**
+
+```{r, tab3, echo=FALSE,warning=FALSE}
+wl0<- data.frame(oly[ which(oly$Sport=='Weightlifting'),  ])
+wl1<-data.frame(count(wl0, Country))
+
+colnames(wl1) <- c("Country", "Number_of_medals")
+kable(wl1)
+
+ggplot(data = wl1, mapping = aes(x = Country, y=Number_of_medals)) +
+  geom_bar(stat="identity", fill="blue")+
+  theme_bw()+
+  labs(y="Number of medals", 
+       x="Country")+ theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+```

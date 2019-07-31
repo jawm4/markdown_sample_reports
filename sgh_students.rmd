@@ -1,0 +1,62 @@
+---
+title: "Students of SGH - simple analysis"
+author: "MJ"
+output:
+  html_document
+---
+## Intro
+
+The data of SGH (Warsaw School of Economics) comes from [The Factbook](http://sknstatystyki.pl/?id_mp=0&id_art=46&id_sub=0&id_kat=0&link_str=0&id_mp_zal=0&id_gal=0&rok=0&mies=0&akc=x).
+
+### Tables and plots
+
+Three datasets were extracted:
+
+* **Number of full-time MA students dependent on faculty in 2015**
+
+```{r tab1, echo=FALSE, warning=FALSE}
+library(knitr)
+kier<-c("Finance and Accounting", "Economics", "International Relations", "Quantitative Economics", "Management")
+freq<-c(2488, 154, 241, 668, 865)
+fac<-data.frame(kier, freq)
+colnames(fac) <- c("Faculty","Number of students")
+kable(fac)
+
+library(ggplot2)
+ggplot(data = fac, mapping = aes(x = kier, y=freq)) +
+  geom_bar(stat="identity",fill="darkgreen")+theme_bw()+
+  labs(y="Number of students", 
+       x="Faculty")
+
+```
+
+* **Number of international students in 2009-2015**
+
+```{r tab2, echo=FALSE, warning=FALSE}
+yrs<-seq(as.Date("2009/1/1"), as.Date("2015/1/1"), "years")
+freq2<-c(240, 278, 395, 462, 564, 673, 808)
+interstud<-data.frame(yrs, freq2)
+colnames(interstud) <- c("Year","Number of international students")
+kable(interstud)
+
+ggplot(data = interstud, mapping = aes(x = yrs, y=freq2)) +
+  geom_bar(stat="identity",fill="darkgreen")+theme_bw()+
+  labs(y="Number of international students", 
+       x="Years")
+```
+
+* **Number of full-time students in 2009-2015**
+
+```{r tab3, echo=FALSE, warning=FALSE}
+freq3<-c(6701, 7374, 7058, 7247, 7409, 7644, 8159)
+stud<-data.frame(yrs, freq3)
+colnames(stud) <- c("Year","Number of students")
+kable(stud)
+
+ggplot(data = stud, mapping = aes(x = yrs, y=freq3))  +
+  geom_bar(stat="identity",fill="darkgreen")+theme_bw()+
+  labs(y="Number of students", 
+       x="Years")
+```
+
+
