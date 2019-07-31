@@ -1,0 +1,67 @@
+---
+title: "R Markdown - Zadanie 2."
+author: "Miko³aj Jaworski"
+output:
+  html_document
+---
+![](http://administracja.sgh.waw.pl/pl/dpir/obowiazki/PublishingImages/logo-SGH-zielone.png)
+
+## Wstêp
+
+Niniejszy raport ma na celu zaprezentowanie trzech podstawowych informacji na temat studentów SGH. Dane zosta³y zaczerpniête ze strony Studenckiego Ko³a Naukowego statystyki, a dok³adniej projektu [The Factbook](http://sknstatystyki.pl/?id_mp=0&id_art=46&id_sub=0&id_kat=0&link_str=0&id_mp_zal=0&id_gal=0&rok=0&mies=0&akc=x).
+
+### Tabele oraz wykresy
+
+Zosta³y wybrane trzy zbiory danych opisuj¹ce:
+
+1. **Liczba studentów studiów stacjonarnych, magisterskich wed³ug kierunku z roku 2015**
+
+```{r tab1, echo=FALSE, warning=FALSE}
+library(knitr)
+kier<-c("FIR", "Ekonomia", "MSG", "MIESI", "Zarz¹dzanie")
+freq<-c(2488, 154, 241, 668, 865)
+kierunki<-data.frame(kier, freq)
+colnames(kierunki) <- c("Kierunek","Liczba studentów")
+kable(kierunki)
+
+library(ggplot2)
+ggplot(data = kierunki, mapping = aes(x = kier, y=freq)) +
+  geom_bar(stat="identity",fill="darkgreen")+theme_bw()+
+  labs(y="Liczba studentów", 
+       x="Kierunek", 
+       title="Liczba studentów na poszczególnych kierunkach w 2015 roku")
+
+```
+
+2. **Liczba cudzoziemców na SGH (2009-2015)**
+
+```{r tab2, echo=FALSE, warning=FALSE}
+lata<-seq(as.Date("2009/1/1"), as.Date("2015/1/1"), "years")
+freq2<-c(240, 278, 395, 462, 564, 673, 808)
+cudz<-data.frame(lata, freq2)
+colnames(cudz) <- c("Rok","Liczba cudzoziemców")
+kable(cudz)
+
+ggplot(data = cudz, mapping = aes(x = lata, y=freq2)) +
+  geom_bar(stat="identity",fill="darkgreen")+theme_bw()+
+  labs(y="Liczba cudzoziemców", 
+       x="Lata", 
+       title="Liczba cudzoziemców na przestrzeni lat")
+```
+
+3. **Liczba studentów na studiach stacjonarnych na SGH (2009-2015)**
+
+```{r tab3, echo=FALSE, warning=FALSE}
+freq3<-c(6701, 7374, 7058, 7247, 7409, 7644, 8159)
+stud<-data.frame(lata, freq3)
+colnames(stud) <- c("Rok","Liczba studentów")
+kable(stud)
+
+ggplot(data = stud, mapping = aes(x = lata, y=freq3))  +
+  geom_bar(stat="identity",fill="darkgreen")+theme_bw()+
+  labs(y="Liczba studentów", 
+       x="Lata", 
+       title="Liczba studentów na przestrzeni lat")
+```
+
+

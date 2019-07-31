@@ -1,0 +1,84 @@
+---
+title: "R Markdown - Zadanie 3."
+author: "Miko³aj Jaworski"
+output:
+  html_document
+---
+
+## Wstêp
+
+Niniejszy raport ma na celu analizê danych z Olimpiad z lat 1896-2014. Poni¿sze tabele i wykresy dotycz¹ edycji letnich. Dane pochodz¹ z [Kaggle: Olympic Sports and Medals](https://www.kaggle.com/the-guardian/olympic-games/data).
+
+```{r, dane, echo=FALSE}
+oly <- read.csv(
+  file="summer.csv",
+  header = TRUE, sep=";",
+  dec = ".")
+```
+### Podstawowe informacje
+
+Zbiór zawiera `r dim(oly)[2]` zmiennych (wymienionych poni¿ej) oraz `r nrow(oly)` obserwacji.
+
+1. **Year**
+2. **City**
+3. **Sport**
+4. **Discipline**
+5. **Athlete**
+6. **Country**
+7. **Gender**
+8. **Event**
+9. **Medal**
+
+### Tabele oraz wykresy
+* **Lista 10 krajów, które zdoby³y najwiêcej medali w historii**
+```{r, tab1, echo=FALSE, warning=FALSE,message=FALSE}
+library(knitr)
+library(ggplot2)
+library(dplyr)
+kraj1<- data.frame(head(sort(table(oly$Country), decreasing = TRUE), 10))
+kraj2<-data.frame(count(oly, Country, Medal))
+polaczone<-kraj2[kraj2[,1] %in% kraj1[,1],]
+
+colnames(kraj1) <- c("Kraj", "Iloœæ medali")
+kable(kraj1)
+
+
+ggplot(data = polaczone, mapping = aes(x = polaczone[,1], y=polaczone[,3])) +
+  geom_bar(stat="identity",aes(fill=Medal))+scale_fill_manual(values=c("sienna","Gold", "Grey"))+
+  theme_bw()+
+  labs(y="Liczba medali", 
+       x="Kraj")
+
+```
+
+* **Medale Polski w wybranych dyscyplinach**
+```{r, tab2, echo=FALSE,warning=FALSE}
+polska<- oly[ which(oly$Country=='POL'),  ]
+polska2<-data.frame(count(polska, Sport))
+
+colnames(polska2) <- c("Sport", "Ilosc")
+kable(polska2)
+
+ggplot(data = polska2, mapping = aes(x = Sport, y=Ilosc)) +
+  geom_point(stat="identity", col="Red")+
+  theme_bw()+
+  labs(y="Liczba medali", 
+       x="Dyscyplina")+ theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+```
+
+* **Lista zdobytych medali w podnoszeniu ciezarow**
+```{r, tab3, echo=FALSE,warning=FALSE}
+wl0<- data.frame(oly[ which(oly$Sport=='Weightlifting'),  ])
+wl1<-data.frame(count(wl0, Country))
+
+colnames(wl1) <- c("Kraj", "Ilosc")
+kable(wl1)
+
+ggplot(data = wl1, mapping = aes(x = Kraj, y=Ilosc)) +
+  geom_bar(stat="identity", fill="blue")+
+  theme_bw()+
+  labs(y="Liczba medali", 
+       x="Kraj")+ theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+```
