@@ -4,8 +4,6 @@ author: "Miko³aj Jaworski"
 output:
   html_document
 ---
-![](http://administracja.sgh.waw.pl/pl/dpir/obowiazki/PublishingImages/logo-SGH-zielone.png)
-
 ## Wstêp
 
 Niniejszy raport ma na celu zaprezentowanie trzech podstawowych informacji na temat studentów SGH. Dane zosta³y zaczerpniête ze strony Studenckiego Ko³a Naukowego statystyki, a dok³adniej projektu [The Factbook](http://sknstatystyki.pl/?id_mp=0&id_art=46&id_sub=0&id_kat=0&link_str=0&id_mp_zal=0&id_gal=0&rok=0&mies=0&akc=x).
