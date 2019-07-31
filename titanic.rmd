@@ -1,0 +1,90 @@
+---
+title: "Titanic - Simple Analysis of Survival"
+author: "MJ"
+output:
+  html_document
+---
+
+## Intro
+
+`Titanic` dataset is built-in base *R*. It includes information about passengers and their survival from the catastrophe. More detailed dataset can be found here: [Kaggle: Titanic Competition](https://www.kaggle.com/c/titanic).
+
+### Variables
+```{r Titanic, echo=FALSE}
+podsum<-summary(Titanic)
+```
+
+Dataset has `r podsum[1]` factors and `r podsum[2]` cases.
+
+1. **Age**:
+  * Adults
+  * Children
+
+2. **Sex**:
+  * Women
+  * Men
+
+3. **Travel Class**:
+  * 1st Class
+  * 2nd Class
+  * 3rd Class
+  * Staff
+
+4. **Survived**
+  * Yes
+  * No
+
+
+### Data
+
+Aggregated data was presented in below tables.
+
+**Survival dependent on Travel Class, Age, Sex:**
+
+```{r tab3, echo=FALSE, warning=FALSE}
+library(knitr)
+titanicdf<-data.frame(Titanic)
+class <-tapply(titanicdf$Freq, titanicdf[,c(1,4)], FUN = sum)
+sex <-tapply(titanicdf$Freq, titanicdf[,c(2,4)], FUN = sum)
+age <-tapply(titanicdf$Freq, titanicdf[,c(3,4)], FUN = sum)
+merged <- rbind(class, sex, age)
+kable(merged)
+
+```
+
+### Plots
+
+```{r wyk1, echo=FALSE}
+op <- par(mfrow=c(1,3))
+barplot(class, 
+        main="Survival by passenger status",
+        xlab="Survived",
+        ylab="Number of passengers",
+        legend =row.names(class),
+        col=c("darkgreen","green", "lightgreen", "blue"),
+        beside=T
+        )
+
+
+barplot(sex, 
+        main="Survival by sex",
+        xlab="Survived",
+        ylab="Number of passengers",
+        legend =row.names(sex),
+        col=c("darkgreen","green"),
+        beside=T
+        )
+
+
+barplot(age, 
+        main="Survival by age",
+        xlab="Survived",
+        ylab="Number of passengers",
+        legend =row.names(age),
+        col=c("darkgreen","green"),
+        beside=T
+        )
+
+par(op)
+```
+
