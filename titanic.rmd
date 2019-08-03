@@ -87,4 +87,3 @@ barplot(age,
 
 par(op)
 ```
-

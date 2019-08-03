@@ -58,5 +58,3 @@ ggplot(data = stud, mapping = aes(x = yrs, y=freq3))  +
   labs(y="Number of students", 
        x="Years")
 ```
-
-
